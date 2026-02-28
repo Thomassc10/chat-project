@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="top-bar">
+            <h2>Chat App</h2>
+            <button id="darkModeBtn">Dark Mode</button>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Chats</h3>
+                    <button id="addContactBtn">+ Add Contact</button>
+                </div>
+                <ul id="chatList" class="chat-list">
+                    </ul>
+            </aside>
+
+            <main class="chat-area" id="chatArea">
+                <div class="chat-header" id="chatHeader" style="display: none;">
+                    <div class="contact-info">
+                        <div class="contact-avatar" id="contactAvatar"></div>
+                        <h2 id="contactName">Contact Name</h2>
+                    </div>
+                    <button id="editContactBtn">Edit</button>
+                </div>
+
+                <div class="messages-display" id="messagesDisplay" style="display: none;">
+                    </div>
+
+                <div class="input-bar" id="inputBar" style="display: none;">
+                    <button id="fileBtn">File</button>
+                    <input type="text" id="messageInput" placeholder="Type a message...">
+                    <button id="sendBtn">Send</button>
+                </div>
+                
+                <div class="no-chat-selected" id="noChatSelected">
+                    <p>Select a chat to start messaging</p>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
