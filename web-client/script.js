@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://localhost:8887");
+const socket = new WebSocket("ws://localhost:3407");
 
 socket.onopen = function(event) {
     console.log("Connected to the Java Server!");
@@ -17,13 +17,11 @@ socket.onerror = function(error) {
     console.error("WebSocket Error:", error);
 }
 
-
-
 // App State
 const state = {
     chatHistory: new Map(), // Maps chatName to an array of message strings
     selectedChat: null,
-    isDarkMode: false
+    isDarkMode: true
 };
 
 // DOM Elements
@@ -44,9 +42,8 @@ const elements = {
 
 // Initialization
 function init() {
-    addChat("Alice");
-    addChat("Bob");
-    addChat("Charlie");
+    elements.darkModeBtn.textContent = "Light Mode";
+    addChat("Thomas");
     renderChatList();
     setupEventListeners();
 }
@@ -113,7 +110,14 @@ function selectChat(chatName) {
 function sendMessage() {
     const text = elements.messageInput.value.trim();
     if (text !== "" && state.selectedChat) {
-        socket.send(text);
+
+        const packet = {
+            id: "message_packet",
+            sender: "Me",
+            receiver: "Other",
+            content: text
+        }
+        socket.send(JSON.stringify(packet));
 
         state.chatHistory.get(state.selectedChat).push(`You: ${text}`);
         elements.messageInput.value = "";

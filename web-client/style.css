@@ -23,6 +23,49 @@ body.dark-mode {
     font-family: 'Arial', sans-serif;
 }
 
+/* Login Screen Styles */
+.login-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Keeps it on top of everything */
+}
+
+.login-box {
+    background-color: var(--panel-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-box input {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+}
+
+.login-box button {
+    background-color: var(--accent-color);
+    color: var(--accent-text);
+    font-weight: bold;
+    padding: 10px;
+}
+
+.error-text {
+    color: #ff5555;
+    font-size: 0.9rem;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--fg-color);
