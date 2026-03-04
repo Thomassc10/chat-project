@@ -234,3 +234,95 @@ button:hover { background-color: var(--hover-bg); }
     color: gray;
     font-size: 1.2rem;
 }
+
+/* Authentication Screen Styles */
+.auth-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.auth-box {
+    background-color: var(--panel-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 320px;
+}
+
+.auth-box div[id$="View"] { /* Targets all our views */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.auth-box input {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+    width: 100%;
+}
+
+.auth-box button {
+    background-color: var(--accent-color);
+    color: var(--accent-text);
+    font-weight: bold;
+    padding: 12px;
+    width: 100%;
+}
+
+.auth-box button.secondary-btn {
+    background-color: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.auth-box button.text-btn {
+    background-color: transparent;
+    color: gray;
+    font-weight: normal;
+    padding: 5px;
+    border: none;
+}
+
+.auth-box button.text-btn:hover {
+    text-decoration: underline;
+}
+
+/* Password Visibility Toggle */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password-btn {
+    position: absolute;
+    right: 5px;
+    background: none !important;
+    border: none !important;
+    color: gray !important;
+    width: auto !important;
+    padding: 5px !important;
+    font-size: 1.2rem;
+}
+
+.error-text {
+    color: #ff5555;
+    font-size: 0.9rem;
+    margin: 0;
+}

@@ -3,19 +3,19 @@ package com.kines.server.packet.packets;
 import com.google.gson.JsonObject;
 import com.kines.server.packet.Packet;
 
-public class LoginRequest extends Packet {
+public class RegisterRequest extends Packet {
 
     private String id;
     private String username;
     private String password;
 
-    public LoginRequest(String username, String password) {
-        this.username = username;
+    public RegisterRequest(String password, String username) {
         this.password = password;
-        id = "login_request";
+        this.username = username;
+        id = "register_request";
     }
 
-    public LoginRequest() {}
+    public RegisterRequest() {}
 
     @Override
     public String getId() {
@@ -28,11 +28,12 @@ public class LoginRequest extends Packet {
         password = obj.get("password").getAsString();
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
 }

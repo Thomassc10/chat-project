@@ -18,6 +18,7 @@ repositories {
 dependencies {
     implementation("org.java-websocket:Java-WebSocket:1.5.7")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("at.favre.lib:bcrypt:0.10.2")
 
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)

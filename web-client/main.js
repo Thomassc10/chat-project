@@ -1,7 +1,6 @@
-// main.js
 import { sendPacket, socket } from './network.js';
+import { initAuth } from './auth.js';
 
-// --- State ---
 export const state = {
     username: null,
     chatHistory: new Map(),
@@ -9,17 +8,11 @@ export const state = {
     isDarkMode: true
 };
 
-// --- DOM Elements ---
-const loginOverlay = document.getElementById('loginOverlay');
-const usernameInput = document.getElementById('usernameInput');
-const loginBtn = document.getElementById('loginBtn');
-const loginError = document.getElementById('loginError');
 const darkModeBtn = document.getElementById('darkModeBtn');
 const addContactBtn = document.getElementById('addContactBtn');
 const chatList = document.getElementById('chatList');
 const chatHeader = document.getElementById('chatHeader');
 const contactName = document.getElementById('contactName');
-const editContactBtn = document.getElementById('editContactBtn');
 const messagesDisplay = document.getElementById('messagesDisplay');
 const inputBar = document.getElementById('inputBar');
 const messageInput = document.getElementById('messageInput');
@@ -27,21 +20,10 @@ const sendBtn = document.getElementById('sendBtn');
 
 function init() {
     darkModeBtn.textContent = "LightMode";
+    initAuth();
     setupEventListeners();
     renderChatList();
 }
-
-// --- Event Listeners ---
-loginBtn.addEventListener('click', () => {
-    const name = usernameInput.value.trim();
-    if (name) {
-        // Create our LoginPacket and send it via the network module
-        sendPacket({
-            id: "login_request",
-            username: name
-        });
-    }
-});
 
 function sendMessage() {
     const text = messageInput.value.trim();
@@ -53,7 +35,7 @@ function sendMessage() {
             receiver: state.selectedChat,
             content: text
         }
-        socket.send(JSON.stringify(packet));
+        sendPacket(packet);
 
         state.chatHistory.get(state.selectedChat).push(`You: ${text}`);
         messageInput.value = "";
@@ -72,21 +54,9 @@ function setupEventListeners() {
     });
 }
 
-// --- UI Export Functions (used by packetHandlers.js) ---
-export function hideLoginScreen() {
-    loginOverlay.style.display = 'none';
-    state.username = usernameInput.value.trim();
-}
-
-export function showLoginError(reason) {
-    loginError.textContent = reason;
-    loginError.style.display = 'block';
-}
-
 export function appendMessage(sender, content) {
     if (state.selectedChat) {
         state.chatHistory.get(state.selectedChat).push(`${sender}: ${content}`);
-        // call your renderMessages() function here
         renderMessages();
     }
 }
@@ -115,7 +85,6 @@ function selectChat(chatName) {
     state.selectedChat = chatName;
     contactName.textContent = chatName;
     
-    // Toggle UI visibility
     noChatSelected.style.display = 'none';
     chatHeader.style.display = 'flex';
     messagesDisplay.style.display = 'flex';
@@ -149,7 +118,6 @@ function renderMessages() {
         messagesDisplay.appendChild(div);
     });
     
-    // Auto-scroll to bottom
     messagesDisplay.scrollTop = messagesDisplay.scrollHeight;
 }
 

@@ -7,12 +7,50 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
-    <div id="loginOverlay" class="login-overlay">
-        <div class="login-box">
-            <h2>Welcome to Chat</h2>
-            <input type="text" id="usernameInput" placeholder="Enter your username" autocomplete="off">
-            <button id="loginBtn">Join Server</button>
-            <p id="loginError" class="error-text" style="display: none;"></p>
+    <div id="authOverlay" class="auth-overlay">
+        <div class="auth-box">
+            
+            <div id="authMenuView">
+                <h2>Welcome to Chat</h2>
+                <div class="auth-buttons">
+                    <button id="showLoginBtn">Log in</button>
+                    <button id="showRegisterBtn" class="secondary-btn">Create account</button>
+                </div>
+            </div>
+
+            <div id="loginView" style="display: none;">
+                <h2>Log In</h2>
+                <input type="text" id="loginUsername" placeholder="Username" autocomplete="username">
+                
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+                    <button type="button" class="toggle-password-btn">👁️</button>
+                </div>
+                
+                <p id="loginError" class="error-text" style="display: none;"></p>
+                <button id="submitLoginBtn">Log in</button>
+                <button id="backToMenuFromLogin" class="text-btn">Back</button>
+            </div>
+
+            <div id="registerView" style="display: none;">
+                <h2>Create Account</h2>
+                <input type="text" id="regUsername" placeholder="Username" autocomplete="username">
+                
+                <div class="password-wrapper">
+                    <input type="password" id="regPassword" placeholder="Password" autocomplete="new-password">
+                    <button type="button" class="toggle-password-btn">👁️</button>
+                </div>
+                
+                <div class="password-wrapper">
+                    <input type="password" id="regPasswordConfirm" placeholder="Repeat Password" autocomplete="new-password">
+                    <button type="button" class="toggle-password-btn">👁️</button>
+                </div>
+                
+                <p id="regError" class="error-text" style="display: none;"></p>
+                <button id="submitRegBtn">Create Account</button>
+                <button id="backToMenuFromReg" class="text-btn">Back</button>
+            </div>
+
         </div>
     </div>
     <div class="app-container">

@@ -1,6 +1,7 @@
 package com.kines.server;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,17 +14,21 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kines.server.packet.ClientHandler;
 import com.kines.server.packet.PacketRegistry;
-import com.kines.server.packet.handers.LoginHandler;
-import com.kines.server.packet.handers.MessageHandler;
+import com.kines.server.packet.handlers.LoginHandler;
+import com.kines.server.packet.handlers.MessageHandler;
+import com.kines.server.packet.handlers.RegisterHandler;
 import com.kines.server.packet.packets.LoginRequest;
 import com.kines.server.packet.packets.LoginResponse;
 import com.kines.server.packet.packets.MessagePacket;
+import com.kines.server.packet.packets.RegisterRequest;
+import com.kines.server.packet.packets.RegisterResponse;
 
 public class Server extends WebSocketServer {
 
     public static Gson gson = new Gson();
     // invert order <String, WebScket>
     public static Map<WebSocket, String> connectedUsers = new ConcurrentHashMap<>();
+    public static Map<String, String> userInfo = new HashMap<>();
     public static ClientHandler clientHandler = new ClientHandler();
 
     public Server(InetSocketAddress address) {
@@ -35,10 +40,15 @@ public class Server extends WebSocketServer {
         registry.register("message_packet", new MessageHandler(), MessagePacket.class);
         registry.register("login_request", new LoginHandler(), LoginRequest.class);
         registry.register("login_response", null, LoginResponse.class);
-        
-        String host = "localhost";
+        registry.register("register_request", new RegisterHandler(), RegisterRequest.class);
+        registry.register("register_response", null, RegisterResponse.class);
+
+        String host = "0.0.0.0";
         int port = 3407;
-        
+        String envPort = System.getenv("PORT");
+        if (envPort != null && !envPort.isEmpty())
+            port = Integer.parseInt(envPort);
+
         WebSocketServer server = new Server(new InetSocketAddress(host, port));
         server.start();
     }

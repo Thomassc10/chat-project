@@ -1,4 +1,4 @@
-package com.kines.server.packet.handers;
+package com.kines.server.packet.handlers;
 
 import org.java_websocket.WebSocket;
 
