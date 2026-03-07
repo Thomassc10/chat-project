@@ -8,10 +8,12 @@ public class LoginResponse extends Packet {
     private String id;
     private boolean success;
     private String reason;
+    private String username;
 
-    public LoginResponse(boolean success, String reason) {
+    public LoginResponse(boolean success, String reason, String username) {
         this.reason = reason;
         this.success = success;
+        this.username = username;
         id = "login_response";
     }
 

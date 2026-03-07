@@ -55,10 +55,8 @@ function setupEventListeners() {
 }
 
 export function appendMessage(sender, content) {
-    if (state.selectedChat) {
-        state.chatHistory.get(state.selectedChat).push(`${sender}: ${content}`);
-        renderMessages();
-    }
+    state.chatHistory.get(sender).push(`${sender}: ${content}`);
+    renderMessages();
 }
 
 function toggleDarkMode() {

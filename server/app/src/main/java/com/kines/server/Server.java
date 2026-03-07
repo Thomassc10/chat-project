@@ -1,7 +1,6 @@
 package com.kines.server;
 
 import java.net.InetSocketAddress;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,7 +11,6 @@ import org.java_websocket.server.WebSocketServer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.kines.server.packet.ClientHandler;
 import com.kines.server.packet.PacketRegistry;
 import com.kines.server.packet.handlers.LoginHandler;
 import com.kines.server.packet.handlers.MessageHandler;
@@ -22,20 +20,24 @@ import com.kines.server.packet.packets.LoginResponse;
 import com.kines.server.packet.packets.MessagePacket;
 import com.kines.server.packet.packets.RegisterRequest;
 import com.kines.server.packet.packets.RegisterResponse;
+import com.kines.server.utils.ClientUtils;
+import com.kines.server.utils.SQLUtils;
 
 public class Server extends WebSocketServer {
 
     public static Gson gson = new Gson();
-    // invert order <String, WebScket>
+
+    // TODO: invert order <String, WebScket> (shouldn't be used in the future, message system needs a revamp)
     public static Map<WebSocket, String> connectedUsers = new ConcurrentHashMap<>();
-    public static Map<String, String> userInfo = new HashMap<>();
-    public static ClientHandler clientHandler = new ClientHandler();
 
     public Server(InetSocketAddress address) {
         super(address);
     }
 
     public static void main(String[] args) {
+        SQLUtils.createTable();
+        
+        // should probably move this somewhere else
         PacketRegistry registry = new PacketRegistry();
         registry.register("message_packet", new MessageHandler(), MessagePacket.class);
         registry.register("login_request", new LoginHandler(), LoginRequest.class);
@@ -55,7 +57,7 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        System.out.println("Client connected: " + conn.getRemoteSocketAddress() + ". Waiting for login request...");
+        System.out.println("Client connected: " + conn.getRemoteSocketAddress());
     }
 
     @Override
@@ -71,7 +73,7 @@ public class Server extends WebSocketServer {
         if (!obj.has("id")) return;
 
         String id = obj.get("id").getAsString();
-        clientHandler.handlePacket(id, obj, conn);
+        ClientUtils.handlePacket(id, obj, conn);
     }
 
     @Override

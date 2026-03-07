@@ -1,13 +1,16 @@
-package com.kines.server.packet;
+package com.kines.server.utils;
 
 import org.java_websocket.WebSocket;
 
 import com.google.gson.JsonObject;
 import com.kines.server.Server;
+import com.kines.server.packet.Packet;
+import com.kines.server.packet.PacketHandler;
+import com.kines.server.packet.PacketRegistry;
 
-public class ClientHandler {
+public class ClientUtils {
 
-    public void handlePacket(String id, JsonObject obj, WebSocket conn) {
+    public static void handlePacket(String id, JsonObject obj, WebSocket conn) {
         PacketRegistry registry = PacketRegistry.getInstance();
         Packet packet = registry.createPacketInstance(id);
 
@@ -18,7 +21,7 @@ public class ClientHandler {
         }
     }
 
-    public void sendPacket(WebSocket conn, Packet packet) {
+    public static void sendPacket(WebSocket conn, Packet packet) {
         conn.send(Server.gson.toJson(packet));
     }
 }

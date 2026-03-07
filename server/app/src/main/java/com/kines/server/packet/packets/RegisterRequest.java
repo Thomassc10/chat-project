@@ -6,10 +6,12 @@ import com.kines.server.packet.Packet;
 public class RegisterRequest extends Packet {
 
     private String id;
+    private String email;
     private String username;
     private String password;
 
-    public RegisterRequest(String password, String username) {
+    public RegisterRequest(String email, String username, String password) {
+        this.email = email;
         this.password = password;
         this.username = username;
         id = "register_request";
@@ -26,6 +28,7 @@ public class RegisterRequest extends Packet {
     public void read(JsonObject obj) {
         username = obj.get("username").getAsString();
         password = obj.get("password").getAsString();
+        email = obj.get("email").getAsString();
     }
 
     public String getPassword() {
@@ -34,6 +37,10 @@ public class RegisterRequest extends Packet {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
 }

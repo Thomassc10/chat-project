@@ -6,11 +6,11 @@ import com.kines.server.packet.Packet;
 public class LoginRequest extends Packet {
 
     private String id;
-    private String username;
+    private String email;
     private String password;
 
-    public LoginRequest(String username, String password) {
-        this.username = username;
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
         id = "login_request";
     }
@@ -24,12 +24,12 @@ public class LoginRequest extends Packet {
 
     @Override
     public void read(JsonObject obj) {
-        username = obj.get("username").getAsString();
+        email = obj.get("email").getAsString();
         password = obj.get("password").getAsString();
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {

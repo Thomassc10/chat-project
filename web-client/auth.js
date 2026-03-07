@@ -5,6 +5,8 @@ const authOverlay = document.getElementById('authOverlay');
 const authMenuView = document.getElementById('authMenuView');
 const loginView = document.getElementById('loginView');
 const registerView = document.getElementById('registerView');
+const submitLoginBtn = document.getElementById('submitLoginBtn');
+const submitRegBtn = document.getElementById('submitRegBtn');
 
 export function initAuth() {
     document.getElementById('showLoginBtn').addEventListener('click', () => switchAuthView(loginView));
@@ -26,8 +28,15 @@ export function initAuth() {
         });
     });
 
-    document.getElementById('submitLoginBtn').addEventListener('click', handleLoginSubmit);
-    document.getElementById('submitRegBtn').addEventListener('click', handleRegisterSubmit);
+    submitLoginBtn.addEventListener('click', handleLoginSubmit);
+    submitRegBtn.addEventListener('click', handleRegisterSubmit);
+
+    submitLoginBtn.addEventListener('keypress', e => {
+        if (e.key === 'Enter') handleLoginSubmit();
+    });
+    submitRegBtn.addEventListener('keypress', e => {
+        if (e.key === 'Enter') handleRegisterSubmit();
+    });
 }
 
 function switchAuthView(viewToShow) {
@@ -42,27 +51,35 @@ function switchAuthView(viewToShow) {
 }
 
 function handleLoginSubmit() {
-    const username = document.getElementById('loginUsername').value.trim();
+    const email = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
     const errorEl = document.getElementById('loginError');
 
-    if (!username || !password) {
+    if (!email || !password) {
         errorEl.textContent = "Please fill in all fields.";
         errorEl.style.display = 'block';
         return;
     }
 
-    sendPacket({ id: "login_request", username, password });
+    sendPacket({ id: "login_request", email: email, password: password });
 }
 
 function handleRegisterSubmit() {
+    const email = document.getElementById('regEmail').value.trim();
     const username = document.getElementById('regUsername').value.trim();
     const password = document.getElementById('regPassword').value;
     const confirm = document.getElementById('regPasswordConfirm').value;
     const errorEl = document.getElementById('regError');
 
-    if (!username || !password || !confirm) {
+    if (!email || !username || !password || !confirm) {
         errorEl.textContent = "Please fill in all fields.";
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        errorEl.textContent = "Please enter a valid email address.";
         errorEl.style.display = 'block';
         return;
     }
@@ -73,7 +90,7 @@ function handleRegisterSubmit() {
         return;
     }
 
-    sendPacket({ id: "register_request", username, password });
+    sendPacket({ id: "register_request", email: email, username: username, password: password });
 }
 
 export function hideAuthScreen(username) {
@@ -84,7 +101,7 @@ export function hideAuthScreen(username) {
 export function showAuthError(reason) {
     if (loginView.style.display === 'flex') {
         const err = document.getElementById('loginError');
-        err.textContent = "Username and/or password incorrect"; 
+        err.textContent = "Invalid username or password."; 
         err.style.display = 'block';
     } else if (registerView.style.display === 'flex') {
         const err = document.getElementById('regError');
