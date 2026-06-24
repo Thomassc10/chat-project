@@ -1,6 +1,6 @@
 import { handleIncomingPacket } from './packetHandlers.js';
 
-export const socket = new WebSocket("wss://192.168.178.211:3407");
+export const socket = new WebSocket("wss://92.5.18.159:3407");
 
 socket.onopen = () => console.log("Connected to server.");
 
