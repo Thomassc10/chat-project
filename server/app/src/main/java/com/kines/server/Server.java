@@ -70,7 +70,10 @@ public class Server extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         JsonObject obj = JsonParser.parseString(message).getAsJsonObject();
         
-        if (!obj.has("id")) return;
+        if (!obj.has("id")) {
+            System.out.println("Received packet without id. " + obj.getAsString());
+            return;
+        }
 
         String id = obj.get("id").getAsString();
         ClientUtils.handlePacket(id, obj, conn);
