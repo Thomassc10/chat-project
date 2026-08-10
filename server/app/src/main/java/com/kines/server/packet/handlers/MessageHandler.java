@@ -1,6 +1,7 @@
 package com.kines.server.packet.handlers;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
 import com.kines.server.Server;
 import com.kines.server.packet.PacketHandler;
@@ -11,13 +12,6 @@ public class MessageHandler implements PacketHandler<MessagePacket> {
 
     @Override
     public void handle(MessagePacket packet, WebSocket conn) {
-        WebSocket sender = Server.connectedUsers.get(packet.getSender());
-
-        if (!sender.equals(conn)) {
-            System.out.println("[WARNING] Packet received from sender does not match with actual sender. Packet's ip: " + conn.getRemoteSocketAddress() + "; Actual sender's ip: " + sender.getRemoteSocketAddress());
-            return;
-        }
-
         WebSocket receiver = Server.connectedUsers.get(packet.getReceiver().toLowerCase());
 
         if (receiver == null) {
@@ -25,6 +19,13 @@ public class MessageHandler implements PacketHandler<MessagePacket> {
             return;
         }
 
-        ClientUtils.sendPacket(receiver, new MessagePacket(packet.getContent(), packet.getSender(), packet.getReceiver()));
+        try {
+            receiver.sendPing();
+        } catch (WebsocketNotConnectedException e) {
+            System.out.println("Websocket not connected.");
+            return;
+        }
+        
+        ClientUtils.sendPacket(receiver, new MessagePacket(packet.getContent(), conn.getAttachment().toString(), packet.getReceiver()));
     }
 }

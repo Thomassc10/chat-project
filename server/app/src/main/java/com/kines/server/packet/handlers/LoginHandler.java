@@ -46,9 +46,13 @@ public class LoginHandler implements PacketHandler<LoginRequest> {
             ClientUtils.sendPacket(conn, new LoginResponse(false, "Invalid username or password.", null));
             return;
         }
+        String lowerCaseUsername = user.getUsername().toLowerCase();
         
-        Server.connectedUsers.put(user.getName().toLowerCase(), conn);
-        ClientUtils.sendPacket(conn, new LoginResponse(true, "Success", user.getName()));
-        System.out.println("Client logged in successfully: " + email);
+        conn.setAttachment(lowerCaseUsername);
+        Server.connectedUsers.put(lowerCaseUsername, conn);
+
+        ClientUtils.sendPacket(conn, new LoginResponse(true, "Success", user.getUsername()));
+        
+        System.out.println("Client logged in successfully: " + user.getUsername());
     }
 }

@@ -12,14 +12,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kines.server.packet.PacketRegistry;
-import com.kines.server.packet.handlers.LoginHandler;
-import com.kines.server.packet.handlers.MessageHandler;
-import com.kines.server.packet.handlers.RegisterHandler;
-import com.kines.server.packet.packets.LoginRequest;
-import com.kines.server.packet.packets.LoginResponse;
-import com.kines.server.packet.packets.MessagePacket;
-import com.kines.server.packet.packets.RegisterRequest;
-import com.kines.server.packet.packets.RegisterResponse;
 import com.kines.server.utils.ClientUtils;
 import com.kines.server.utils.SQLUtils;
 
@@ -38,12 +30,8 @@ public class Server extends WebSocketServer {
         
         // should probably move this somewhere else
         PacketRegistry registry = new PacketRegistry();
-        registry.register("message_packet", new MessageHandler(), MessagePacket.class);
-        registry.register("login_request", new LoginHandler(), LoginRequest.class);
-        registry.register("login_response", null, LoginResponse.class);
-        registry.register("register_request", new RegisterHandler(), RegisterRequest.class);
-        registry.register("register_response", null, RegisterResponse.class);
-
+        registry.registerPackets();
+        
         String host = "0.0.0.0";
         int port = 3407;
         String envPort = System.getenv("PORT");
@@ -61,8 +49,11 @@ public class Server extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        System.out.println("Client disconnected: " + conn.getRemoteSocketAddress());
-        // how to remove from map...
+        String username = conn.getAttachment();
+        if (username != null) {
+            connectedUsers.remove(username);
+            System.out.println("Client disconnected: " + username);
+        }
     }
 
     @Override
