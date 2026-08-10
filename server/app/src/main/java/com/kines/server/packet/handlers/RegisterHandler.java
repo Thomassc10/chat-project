@@ -24,18 +24,17 @@ public class RegisterHandler implements PacketHandler<RegisterRequest> {
             return;
         }
 
-        // in case there is a problem with matching usernames (shouldn't be tho, and I don't want to make usernames unique)
-        /*if (Server.userInfo.containsKey(username)) {
-            ClientUtils.sendPacket(conn, new RegisterResponse(false, "Username alredy taken.", null));
+        if (SQLUtils.hasUsername(username)) {
+            ClientUtils.sendPacket(conn, new RegisterResponse(false, "Username already taken.", null));
             return;
-        }*/
+        }
 
         String passwordHash = BCrypt.withDefaults().hashToString(12, password.toCharArray());
 
         SQLUtils.insertUser(email, username, passwordHash);
         System.out.println("Registered new user: " + email);
         
-        Server.connectedUsers.put(conn, packet.getUsername());
+        Server.connectedUsers.put(packet.getUsername(), conn);
         ClientUtils.sendPacket(conn, new RegisterResponse(true, "Account created successfully.", username));
     }
 

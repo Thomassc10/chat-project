@@ -1,5 +1,8 @@
 package com.kines.server.packet.handlers;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.java_websocket.WebSocket;
 
 import com.kines.server.Server;
@@ -14,12 +17,21 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class LoginHandler implements PacketHandler<LoginRequest> {
 
+    private Pattern emailRegex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
     @Override
     public void handle(LoginRequest packet, WebSocket conn) {
         String email = packet.getEmail();
         String password = packet.getPassword();
 
-        User user = SQLUtils.getUserByEmail(email);
+        User user = null;
+
+        Matcher matcher = emailRegex.matcher(email);
+        if (matcher.matches()) {
+            user = SQLUtils.getUserByEmail(email);
+        } else {
+            user = SQLUtils.getUserByUsername(email);
+        }
         
         if (user == null) {
             ClientUtils.sendPacket(conn, new LoginResponse(false, "Invalid username or password.", null));
@@ -35,9 +47,8 @@ public class LoginHandler implements PacketHandler<LoginRequest> {
             return;
         }
         
-        Server.connectedUsers.put(conn, user.getName());
+        Server.connectedUsers.put(user.getName().toLowerCase(), conn);
         ClientUtils.sendPacket(conn, new LoginResponse(true, "Success", user.getName()));
-        // TODO: send data from database to account (contacts, chat messages, etc)
         System.out.println("Client logged in successfully: " + email);
     }
 }

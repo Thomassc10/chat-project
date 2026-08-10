@@ -92,7 +92,7 @@ function selectChat(chatName) {
     renderMessages();
 }
 
-function renderChatList() {
+export function renderChatList() {
     chatList.innerHTML = '';
     for (const chatName of state.chatHistory.keys()) {
         const li = document.createElement('li');

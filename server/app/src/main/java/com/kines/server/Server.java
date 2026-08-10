@@ -27,8 +27,7 @@ public class Server extends WebSocketServer {
 
     public static Gson gson = new Gson();
 
-    // TODO: invert order <String, WebScket> (shouldn't be used in the future, message system needs a revamp)
-    public static Map<WebSocket, String> connectedUsers = new ConcurrentHashMap<>();
+    public static Map<String, WebSocket> connectedUsers = new ConcurrentHashMap<>();
 
     public Server(InetSocketAddress address) {
         super(address);
@@ -63,7 +62,7 @@ public class Server extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         System.out.println("Client disconnected: " + conn.getRemoteSocketAddress());
-        connectedUsers.remove(conn);
+        // how to remove from map...
     }
 
     @Override
@@ -71,7 +70,7 @@ public class Server extends WebSocketServer {
         JsonObject obj = JsonParser.parseString(message).getAsJsonObject();
         
         if (!obj.has("id")) return;
-
+        
         String id = obj.get("id").getAsString();
         ClientUtils.handlePacket(id, obj, conn);
     }

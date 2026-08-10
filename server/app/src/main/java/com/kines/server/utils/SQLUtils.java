@@ -19,7 +19,7 @@ public class SQLUtils {
     }
 
     public static void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS users (id TEXT NOT NULL, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL, password TEXT NOT NULL);";
+        String sql = "CREATE TABLE IF NOT EXISTS users (id TEXT NOT NULL, email TEXT NOT NULL UNIQUE, username TEXT NOT NULL, password TEXT NOT NULL);";
         try {
             Connection conn = getConnection();
             Statement statement = conn.createStatement();
@@ -31,7 +31,7 @@ public class SQLUtils {
     }
 
     public static void insertUser(String email, String name, String password) {
-        String sql = "INSERT INTO users (id, email, name, password) VALUES(?, ?, ?, ?);";
+        String sql = "INSERT INTO users (id, email, username, password) VALUES(?, ?, ?, ?);";
         try {
             Connection conn = getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
@@ -48,14 +48,14 @@ public class SQLUtils {
     }
 
     public static void readUsers() {
-        String sql = "SELECT id, name, email, password FROM users;";
+        String sql = "SELECT id, username, email, password FROM users;";
         try {
             Connection conn = getConnection();
             var statement = conn.createStatement();
             ResultSet set = statement.executeQuery(sql);
             while(set.next()) {
                 String id = set.getString("id");
-                String name = set.getString("name");  
+                String name = set.getString("username");  
                 String email = set.getString("email");
                 String password = set.getString("password");
                 System.out.printf("ID: %s, Name: %s, Email: %s%n, Password: %s\n", id, name, email, password); 
@@ -67,7 +67,7 @@ public class SQLUtils {
     }
 
     public static User getUserByID(String id) {
-        String sql = "SELECT id, name, email, password FROM users;";
+        String sql = "SELECT id, username, email, password FROM users;";
         try {
             Connection conn = getConnection();
             var statement = conn.createStatement();
@@ -82,7 +82,7 @@ public class SQLUtils {
                 return null;
             }
 
-            String name = set.getString("name");  
+            String name = set.getString("username");  
             String email = set.getString("email");
             String password = set.getString("password");
             conn.close();
@@ -94,14 +94,14 @@ public class SQLUtils {
     }
 
     public static User getUserByEmail(String email) {
-        String sql = "SELECT id, name, email, password FROM users;";
+        String sql = "SELECT id, username, email, password FROM users;";
         try {
             Connection conn = getConnection();
             var statement = conn.createStatement();
             ResultSet set = statement.executeQuery(sql);
             String e = "";
             while(set.next() || e.isEmpty()) {
-                if (set.getString("email").equals(email)) {
+                if (set.getString("email").equalsIgnoreCase(email)) {
                     e = set.getString("email");
                     break;
                 }
@@ -112,10 +112,39 @@ public class SQLUtils {
             }
 
             String id = set.getString("id");
-            String name = set.getString("name");  
+            String name = set.getString("username");  
             String password = set.getString("password");
             conn.close();
             return new User(id, email, name, password);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static User getUserByUsername(String username) {
+        String sql = "SELECT id, username, email, password FROM users;";
+        try {
+            Connection conn = getConnection();
+            var statement = conn.createStatement();
+            ResultSet set = statement.executeQuery(sql);
+            String e = "";
+            while(set.next() || e.isEmpty()) {
+                if (set.getString("username").equalsIgnoreCase(username)) {
+                    e = set.getString("username");
+                    break;
+                }
+            }
+
+            if (e.isEmpty()) {
+                return null;
+            }
+
+            String id = set.getString("id");
+            String email = set.getString("email");
+            String password = set.getString("password");
+            conn.close();
+            return new User(id, email, username, password);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -129,12 +158,30 @@ public class SQLUtils {
             var statement = conn.createStatement();
             ResultSet set = statement.executeQuery(sql);
             while(set.next()) {
-                if (set.getString("email").equals(email))
+                if (set.getString("email").equalsIgnoreCase(email))
                     return true;
             }
             conn.close();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+        }
+        return false;
+    }
+
+    public static boolean hasUsername(String username) {
+        String sql = "SELECT username FROM users;";
+        Connection conn;
+        try {
+            conn = getConnection();
+            var statement = conn.createStatement();
+            ResultSet set = statement.executeQuery(sql);
+            while(set.next()) {
+                if (set.getString("username").equalsIgnoreCase(sql))
+                    return true;
+            }
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }

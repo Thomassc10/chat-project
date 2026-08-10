@@ -1,5 +1,6 @@
 import { appendMessage } from './main.js';
 import { hideAuthScreen, showAuthError } from './auth.js';
+import { renderChatList } from './main.js';
 
 export function handleIncomingPacket(packet) {
     const handler = registry[packet.id];

@@ -11,12 +11,20 @@ public class MessageHandler implements PacketHandler<MessagePacket> {
 
     @Override
     public void handle(MessagePacket packet, WebSocket conn) {
-        if (Server.connectedUsers.containsValue(packet.getReceiver())) {
-            // TODO: remove for loop (whole thing should be revamped tho)
-            for (WebSocket keySet : Server.connectedUsers.keySet()) {
-                if (Server.connectedUsers.get(keySet).equals(packet.getReceiver()))
-                    ClientUtils.sendPacket(keySet, new MessagePacket(packet.getContent(), packet.getSender(), packet.getReceiver()));
-            }
+        WebSocket sender = Server.connectedUsers.get(packet.getSender());
+
+        if (!sender.equals(conn)) {
+            System.out.println("[WARNING] Packet received from sender does not match with actual sender. Packet's ip: " + conn.getRemoteSocketAddress() + "; Actual sender's ip: " + sender.getRemoteSocketAddress());
+            return;
         }
+
+        WebSocket receiver = Server.connectedUsers.get(packet.getReceiver().toLowerCase());
+
+        if (receiver == null) {
+            System.out.println("Couldn't find receiver's socket: " + packet.getReceiver());
+            return;
+        }
+
+        ClientUtils.sendPacket(receiver, new MessagePacket(packet.getContent(), packet.getSender(), packet.getReceiver()));
     }
 }
