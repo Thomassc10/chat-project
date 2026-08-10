@@ -11,9 +11,9 @@ import org.java_websocket.server.WebSocketServer;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.kines.server.database.DatabaseManager;
 import com.kines.server.packet.PacketRegistry;
 import com.kines.server.utils.ClientUtils;
-import com.kines.server.utils.SQLUtils;
 
 public class Server extends WebSocketServer {
 
@@ -26,9 +26,8 @@ public class Server extends WebSocketServer {
     }
 
     public static void main(String[] args) {
-        SQLUtils.createTable();
+        DatabaseManager.createTables();
         
-        // should probably move this somewhere else
         PacketRegistry registry = new PacketRegistry();
         registry.registerPackets();
         

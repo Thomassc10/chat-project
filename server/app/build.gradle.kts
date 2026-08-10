@@ -21,6 +21,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("at.favre.lib:bcrypt:0.10.2")
     implementation("org.xerial:sqlite-jdbc:3.51.2.0")
+    implementation("com.zaxxer:HikariCP:5.1.0")
     
 
     // Use JUnit Jupiter for testing.
