@@ -1,6 +1,6 @@
 import { handleIncomingPacket } from './packetHandlers.js';
 
-export const socket = new WebSocket("ws://192.168.178.211:3407");
+export const socket = new WebSocket("wss://kines-server.duckdns.org");
 
 socket.onopen = () => console.log("Connected to server.");
 

@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("com.gradleup.shadow") version "8.3.0"
 }
 
 repositories {
@@ -40,10 +41,16 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "server.App"
+    mainClass = "server.Server"
 }
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.named<Jar>("shadowJar") {
+    manifest {
+        attributes["Main-Class"] = "com.kines.server.Server"
+    }
 }

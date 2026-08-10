@@ -35,8 +35,10 @@ public class PacketRegistry {
     public Packet createPacketInstance(String id) {
         Class<? extends Packet> clazz = packets.get(id);
         
-        if (clazz == null) return null;
-        
+        if (clazz == null) {
+            System.out.println("Received packet with unrecognized id: " + id);
+            return null;
+        }
         try {
             return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {

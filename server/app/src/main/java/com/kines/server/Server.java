@@ -61,7 +61,7 @@ public class Server extends WebSocketServer {
         JsonObject obj = JsonParser.parseString(message).getAsJsonObject();
         
         if (!obj.has("id")) return;
-        
+
         String id = obj.get("id").getAsString();
         ClientUtils.handlePacket(id, obj, conn);
     }
