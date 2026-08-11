@@ -15,7 +15,7 @@ public class SQLUtils {
     private static HikariDataSource dataSource = DatabaseManager.getDataSource();
 
     public static void insertUser(String email, String username, String password) {
-        String sql = "INSERT INTO users_info (id, email, username, password) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO users_info (id, email, username, password) VALUES(?, ?, ?, ?);";
 
         try (Connection conn = dataSource.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);) {
@@ -33,11 +33,12 @@ public class SQLUtils {
     }
 
     public static User getUserByEmail(String email) {
-        String sql = "SELECT id, username, email, password FROM users;";
+        String sql = "SELECT id, username, email, password FROM users_info;";
         try (Connection conn = dataSource.getConnection();
-            PreparedStatement statement = conn.prepareStatement(sql);) {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet set = statement.executeQuery();) {
             
-            ResultSet set = statement.executeQuery(sql);
+            
             String e = "";
             while(set.next() || e.isEmpty()) {
                 if (set.getString("email").equalsIgnoreCase(email)) {
@@ -62,10 +63,10 @@ public class SQLUtils {
     }
 
     public static User getUserByUsername(String username) {
-        String sql = "SELECT id, username, email, password FROM users;";
+        String sql = "SELECT id, username, email, password FROM users_info;";
         try (Connection conn = dataSource.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql); 
-            ResultSet set = statement.executeQuery(sql);) {
+            ResultSet set = statement.executeQuery();) {
             
             String e = "";
             while(set.next() || e.isEmpty()) {
@@ -91,10 +92,10 @@ public class SQLUtils {
     }
 
     public static boolean hasEmail(String email) {
-        String sql = "SELECT email FROM users;";
+        String sql = "SELECT email FROM users_info;";
         try (Connection conn = dataSource.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
-            ResultSet set = statement.executeQuery(sql);) {
+            ResultSet set = statement.executeQuery();) {
             
             while(set.next()) {
                 if (set.getString("email").equalsIgnoreCase(email))
@@ -107,11 +108,11 @@ public class SQLUtils {
     }
 
     public static boolean hasUsername(String username) {
-        String sql = "SELECT username FROM users;";
+        String sql = "SELECT username FROM users_info;";
         
         try (Connection conn = dataSource.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
-            ResultSet set = statement.executeQuery(sql);) {
+            ResultSet set = statement.executeQuery();) {
             
             while(set.next()) {
                 if (set.getString("username").equalsIgnoreCase(sql))

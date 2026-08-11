@@ -26,7 +26,7 @@ public class Server extends WebSocketServer {
     }
 
     public static void main(String[] args) {
-        DatabaseManager.createTables();
+        DatabaseManager.initializePool();
         
         PacketRegistry registry = new PacketRegistry();
         registry.registerPackets();

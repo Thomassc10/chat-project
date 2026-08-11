@@ -28,10 +28,10 @@ public class DatabaseManager {
     }
 
     public static void createTables() {
-        String sql = "CREATE TABLE IF NOT EXISTS users (id TEXT NOT NULL, email TEXT NOT NULL UNIQUE, username TEXT NOT NULL UNIQUE, password TEXT NOT NULL);";
-        try {
-            Connection conn = dataSource.getConnection();
-            Statement statement = conn.createStatement();
+        String sql = "CREATE TABLE IF NOT EXISTS users_info (id TEXT NOT NULL, email TEXT NOT NULL UNIQUE, username TEXT NOT NULL UNIQUE, password TEXT NOT NULL);";
+        try (Connection conn = dataSource.getConnection();
+            Statement statement = conn.createStatement();) {
+            
             statement.execute(sql);
 
             System.out.println("Tables created.");
