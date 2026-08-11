@@ -1,3 +1,5 @@
+.vscode
+
 users_info.db
 users_info.db-shm
 users_info.db-wal
