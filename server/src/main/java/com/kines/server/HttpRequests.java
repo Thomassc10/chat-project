@@ -29,8 +29,7 @@ public class HttpRequests {
     }
 
     public void addCorsHeaders(HttpExchange exchange) {
-        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-        //exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "https://kineschat.xyz");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "https://kineschat.xyz");
         exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, OPTIONS");
         exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
     }

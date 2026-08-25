@@ -5,7 +5,7 @@ export let socket;
 
 export async function performLogin(username, password) {
     try {
-        const response = await fetch('http://127.0.0.1:8080/login', {
+        const response = await fetch('https://kines-server.duckdns.org:8080/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ export async function performLogin(username, password) {
 
 export async function performRegister(email, username, password) {
     try {
-        const response = await fetch('http://127.0.0.1:8080/register', {
+        const response = await fetch('https://kines-server.duckdns.org:8080/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,7 +64,7 @@ export async function performRegister(email, username, password) {
 }
 
 function connectToWebsocket(token, username) {
-    socket = new WebSocket('ws://localhost:3407/chat?token=' + token);
+    socket = new WebSocket('wss://kines-server.duckdns.org:3407/chat?token=' + token);
     socket.onopen = () => console.log("Connected to server.");
     hideAuthScreen(username);
     socket.onmessage = (event) => {
