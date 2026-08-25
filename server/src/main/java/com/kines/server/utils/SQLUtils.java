@@ -38,9 +38,8 @@ public class SQLUtils {
             PreparedStatement statement = conn.prepareStatement(sql);
             ResultSet set = statement.executeQuery();) {
             
-            
             String e = "";
-            while(set.next() || e.isEmpty()) {
+            while(set.next() || !e.isEmpty()) {
                 if (set.getString("email").equalsIgnoreCase(email)) {
                     e = set.getString("email");
                     break;
@@ -63,13 +62,14 @@ public class SQLUtils {
     }
 
     public static User getUserByUsername(String username) {
+        if (username == null) return null;
         String sql = "SELECT id, username, email, password FROM users_info;";
         try (Connection conn = dataSource.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql); 
             ResultSet set = statement.executeQuery();) {
             
             String e = "";
-            while(set.next() || e.isEmpty()) {
+            while(set.next() || !e.isEmpty()) {
                 if (set.getString("username").equalsIgnoreCase(username)) {
                     e = set.getString("username");
                     break;

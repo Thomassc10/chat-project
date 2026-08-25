@@ -28,7 +28,7 @@ public class LoginHandler implements PacketHandler<LoginRequest> {
 
         Matcher matcher = emailRegex.matcher(email);
         if (matcher.matches()) {
-            user = SQLUtils.getUserByEmail(email);
+            user = SQLUtils.getUserByEmail(email);  
         } else {
             user = SQLUtils.getUserByUsername(email);
         }
@@ -49,6 +49,7 @@ public class LoginHandler implements PacketHandler<LoginRequest> {
         String lowerCaseUsername = user.getUsername().toLowerCase();
         
         conn.setAttachment(lowerCaseUsername);
+
         Server.connectedUsers.put(lowerCaseUsername, conn);
 
         ClientUtils.sendPacket(conn, new LoginResponse(true, "Success", user.getUsername()));

@@ -12,6 +12,11 @@ public class MessageHandler implements PacketHandler<MessagePacket> {
 
     @Override
     public void handle(MessagePacket packet, WebSocket conn) {
+        if (!packet.getSender().equalsIgnoreCase(conn.getAttachment().toString())) {
+            System.out.println("Sender and Attachment are not the same " + conn.getRemoteSocketAddress());
+            return;
+        }
+        
         WebSocket receiver = Server.connectedUsers.get(packet.getReceiver().toLowerCase());
 
         if (receiver == null) {

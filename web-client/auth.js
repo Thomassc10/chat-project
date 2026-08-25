@@ -1,10 +1,11 @@
-import { sendPacket } from './network.js';
 import { state } from './main.js';
+import { performLogin, performRegister } from './network.js';
 
 const authOverlay = document.getElementById('authOverlay');
 const authMenuView = document.getElementById('authMenuView');
 const loginView = document.getElementById('loginView');
 const registerView = document.getElementById('registerView');
+const appContainer = document.querySelector('.app-container');
 const submitLoginBtn = document.getElementById('submitLoginBtn');
 const submitRegBtn = document.getElementById('submitRegBtn');
 
@@ -61,7 +62,8 @@ function handleLoginSubmit() {
         return;
     }
 
-    sendPacket({ id: "login_request", email: email, password: password });
+    submitLoginBtn.disabled = true;
+    performLogin(email, password);
 }
 
 function handleRegisterSubmit() {
@@ -90,18 +92,27 @@ function handleRegisterSubmit() {
         return;
     }
 
-    sendPacket({ id: "register_request", email: email, username: username, password: password });
+    submitRegBtn.disabled = true;
+    performRegister(email, username, password);
 }
 
 export function hideAuthScreen(username) {
     authOverlay.style.display = 'none';
+    appContainer.style.display = 'flex';
     state.username = username;
+}
+
+export function showLoginScreen() {
+    appContainer.style.display = 'none';
+    authOverlay.style.display = 'flex';
+    switchAuthView(loginView);
+    document.getElementById('loginUsername').focus();
 }
 
 export function showAuthError(reason) {
     if (loginView.style.display === 'flex') {
         const err = document.getElementById('loginError');
-        err.textContent = "Invalid username or password."; 
+        err.textContent = reason; 
         err.style.display = 'block';
     } else if (registerView.style.display === 'flex') {
         const err = document.getElementById('regError');

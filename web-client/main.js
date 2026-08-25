@@ -1,4 +1,4 @@
-import { sendPacket, socket } from './network.js';
+import { sendPacket } from './network.js';
 import { initAuth } from './auth.js';
 
 export const state = {

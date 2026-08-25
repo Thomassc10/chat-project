@@ -22,6 +22,7 @@ dependencies {
     implementation("at.favre.lib:bcrypt:0.10.2")
     implementation("org.xerial:sqlite-jdbc:3.51.2.0")
     implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
     
 
     // Use JUnit Jupiter for testing.
